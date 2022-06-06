@@ -1,3 +1,11 @@
+/* Calendar requirements */
+const iCalParser = require('../../utils/iCalParser');
+
+const TEST_ICAL =
+  "https://calendar.google.com/calendar/ical/etsmtl.net_2ke" +
+  "m5ippvlh70v7pd6oo4ed9ig%40group.calendar.google.com/public/basic.ics";
+
+
 /* Function called only once before all the tests in this file */
 beforeAll(() => {
     // Use returns if the function your going to call returns a promess
@@ -22,6 +30,13 @@ afterEach(() => {
 
 /*-------CALENDAR TESTS--------*/
 
-test('adds 1 + 2 to equal 3', () => {
-    expect(sum(1, 2)).toBe(3);
+test('Instantiate iCalParser', () => {
+    var parser = new iCalParser(TEST_ICAL)
+    expect(parser.url).toBe(TEST_ICAL)
+});
+
+test('Parse test calendar with iCalParser', () => {
+    var parser = new iCalParser(TEST_ICAL)
+    expect(parser.url).toBe(TEST_ICAL)
+    // Test parsing function
 });
