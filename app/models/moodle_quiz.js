@@ -13,7 +13,15 @@ class MoodleQuiz extends MoodleActivity {
         super(title, moduleid, sectionid, modulename, directory)
         this.timeopen = timeopen
         this.timeclose = timeclose
-    }
+    }  
+    
+    setTimeOpen(timeOpen){
+        this.timeopen = timeOpen;
+    } 
+
+    setTimeClose(timeClose){
+        this.timeclose = timeClose;
+    } 
 }
 
 module.exports = MoodleQuiz
