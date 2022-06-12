@@ -6,7 +6,7 @@ var tar = require('tar')
 var xml2js = require('xml2js')
 var base_path = './tmp'
 
-function extract_tar(file_path) {
+function extractTar(file_path) {
     // Checks if tmp directory exists
     if (!fs.existsSync(base_path)) {
         fs.mkdirSync(base_path)
@@ -31,8 +31,8 @@ function extract_tar(file_path) {
 }
 
 
-function fetch_quiz_info(file_path, directory) {
-    var data = fs.readFileSync(file_path + directory + "/quiz.xml", "utf-8")
+function fetchQuizInfo(file_path, directory) {
+    var data = fs.readFileSync(file_path + "/" + directory + "/quiz.xml", "utf-8")
     var quiz_info
     xml2js.parseString(data, function (err, data) {
         quiz_info = {
@@ -45,8 +45,8 @@ function fetch_quiz_info(file_path, directory) {
 }
 
 
-function fetch_assign_info(file_path, directory) {
-    var data = fs.readFileSync(file_path + directory + "/assign.xml", "utf-8")
+function fetchAssignInfo(file_path, directory) {
+    var data = fs.readFileSync(file_path + "/" + directory + "/assign.xml", "utf-8")
     var assign_info
     xml2js.parseString(data, function (err, data) {
         assign_info = {
@@ -58,21 +58,21 @@ function fetch_assign_info(file_path, directory) {
     return assign_info
 }
 
-function fetch_activities(file_path) {
+function fetchActivities(file_path) {
     var activities = []
-    var xml_data = fs.readFileSync(file_path + "moodle_backup.xml", "utf-8")
+    var xml_data = fs.readFileSync(file_path + "/moodle_backup.xml", "utf-8")
     xml2js.parseString(xml_data, function (err, data) {
         for (var obj of data['moodle_backup']['information'][0]['contents'][0]['activities'][0]['activity']) {
             switch (obj.modulename[0]) {
                 case 'quiz':
-                    quiz_info = fetch_quiz_info(file_path, obj.directory[0])
+                    quiz_info = fetchQuizInfo(file_path, obj.directory[0])
                     activities.push(new MoodleQuiz(
                         obj.title[0], obj.moduleid[0], obj.sectionid[0], obj.modulename[0], obj.directory[0],
                         quiz_info.timeopen, quiz_info.timeclose
                     ))
                     break;
                 case 'assign':
-                    assign_info = fetch_assign_info(file_path, obj.directory[0])
+                    assign_info = fetchAssignInfo(file_path, obj.directory[0])
                     activities.push(new MoodleAssignment(
                         obj.title[0], obj.moduleid[0], obj.sectionid[0], obj.modulename[0], obj.directory[0],
                         assign_info.duedate, assign_info.allowsubmissionsfromdate
@@ -95,6 +95,6 @@ function fetch_activities(file_path) {
 // fetch_activities(new_path)
 
 module.exports = {
-    extract_tar: extract_tar,
-    fetch_activities: fetch_activities
+    extractTar: extractTar,
+    fetchActivities: fetchActivities
 }

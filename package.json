@@ -9,6 +9,7 @@
         "test": "jest"
     },
     "dependencies": {
+        "commander": "^9.3.0",
         "express": "^4.16.1",
         "node-ical": "^0.15.1",
         "tar": "^6.1.11",
