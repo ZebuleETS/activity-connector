@@ -1,27 +1,5 @@
 const DslParser = require('../../utils/dsl-parser')
 
-/* Function called only once before all the tests in this file */
-beforeAll(() => {
-    // Use returns if the function your going to call returns a promess
-    return true;
-});
-
-/* Function called only once after all the tests in this file */
-afterAll(() => {
-    // Use returns if the function your going to call returns a promess
-    return true;
-});
-
-/* Function called before each of the tests in this file */
-beforeEach(() => {
-    true;
-});
-
-/* Function called after each of the tests in this file */
-afterEach(() => {
-    true;
-});
-
 /*-------DSL TESTS--------*/
 
 test('Test parser basic', () => {
@@ -30,10 +8,76 @@ test('Test parser basic', () => {
         [
             [],
             [
-               "Exam 1:Seminar 2",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,"
+               {
+                  "activity": "Exam 1",
+                  "open": {
+                     "activity": "Seminar 2"
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               }
             ],
             "EOF"
         ]
@@ -46,29 +90,466 @@ test('Test parser with a lot of stuff', () => {
         [
             [],
             [
-               "Exam 1:Seminar 2",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)+,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,w,",
-               "Moodle Quiz 1: opens:Seminar 1(end)null, closes: Seminar 2(start)-,30,m,",
-               "Moodle Homework 1: allow submissions after:Laboratory 2(end)null, due date: Laboratory 3(start)-,1,d,@,23:55, cutoff date: Laboratory 3(start)-,1,d,@,23:55",
-               "Moodle Quiz 1: opens:Seminar 1(end)+,1,h,, closes: Practicum 2(start)-,15,m,",
-               "Exam 2:Seminar 13"
+               {
+                  "activity": "Exam 1",
+                  "open": {
+                     "activity": "Seminar 2"
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "w"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end"
+                  },
+                  "close": {
+                     "activity": "Seminar 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 30,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Homework 1",
+                  "open": {
+                     "activity": "Laboratory 2",
+                     "modifier": "end"
+                  },
+                  "due": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  },
+                  "cutoff": {
+                     "activity": "Laboratory 3",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 1,
+                        "type": "d",
+                        "at": "23:55"
+                     }
+                  }
+               },
+               {
+                  "activity": "Moodle Quiz 1",
+                  "open": {
+                     "activity": "Seminar 1",
+                     "modifier": "end",
+                     "time": {
+                        "modifier": "+",
+                        "number": 1,
+                        "type": "h"
+                     }
+                  },
+                  "close": {
+                     "activity": "Practicum 2",
+                     "modifier": "start",
+                     "time": {
+                        "modifier": "-",
+                        "number": 15,
+                        "type": "m"
+                     }
+                  }
+               },
+               {
+                  "activity": "Exam 2",
+                  "open": {
+                     "activity": "Seminar 13"
+                  }
+               }
             ],
             "EOF"
         ]

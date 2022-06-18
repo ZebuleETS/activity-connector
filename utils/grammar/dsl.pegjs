@@ -8,13 +8,25 @@ Expression
 Rule
 /* define specific rules for the activity types */
   = head:ExamActivity _ tail:Timing Spacing {
-      return head + ':' + tail;
-  }
+        return {
+          "activity": head,
+          "open": tail
+        };
+    }
     / activity:MoodleQuizActivity _ opens:MoodleQuizOpenTime _ closes:MoodleQuizCloseTime Spacing {
-      return activity + ': opens:' + opens + ', closes: ' + closes;
+      return {
+      	"activity": activity,
+        "open": opens,
+        "close": closes
+      };
     }
     / activity:MoodleHomeworkActivity _ opens:MoodleHomeworkAllowSubmissionsTime _ due:MoodleHomeworkDueTime _ cutoff:MoodleHomeworkCutoffTime Spacing {
-      return activity + ': allow submissions after:' + opens + ', due date: ' + due + ', cutoff date: ' + cutoff;
+      return {
+      	"activity": activity,
+        "open": opens,
+        "due": due,
+        "cutoff": cutoff
+      };
     }
 
 ExamActivity
@@ -47,10 +59,27 @@ Activity "Activity Number (e.g., E1 for Exam 1)"
 Timing
 /* Case for Session, Labs, Practica */
   = head:MeetingSequence tail:TimeModifier? {
-    var result = head, i;
+    var result = {"activity":head}, i;
     if (tail !== null) {
       for (i=0; i<tail.length; i++) {
-        result += tail[i];
+      	if(tail[i] !== null){
+        	switch(i){
+            	case 0:
+                	result.modifier = tail[i];
+                    break;
+                case 1:
+                	var modif = {};
+                    
+                    if(tail[i][0] !== null) { modif.modifier = tail[i][0][0]; }
+                    if(tail[i][0][1] !== null) {
+                    	modif.number = tail[i][0][1][0];
+                        modif.type = tail[i][0][1][1];
+                    }
+                    if(tail[i][1] !== null) { modif.at = tail[i][1][1]; }
+                	result.time = modif;
+                    break;
+            }
+        }
       }
     }
     return result;
@@ -92,9 +121,9 @@ PRACTICUM_MEETING
   = 'P' {return 'Practicum'; }
 
 MEETING_START 
-  = 'S' {return '(start)'; }
+  = 'S' {return 'start'; }
 MEETING_END 
-  = 'F' {return '(end)'; }
+  = 'F' {return 'end'; }
 
 Spacing 
   = (Space / Comment)*

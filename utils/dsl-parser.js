@@ -142,13 +142,25 @@ function peg$parse(input, options) {
       peg$startRuleFunction  = peg$parseExpression,
 
       peg$c0 = function(head, tail) {
-            return head + ':' + tail;
-        },
+              return {
+                "activity": head,
+                "open": tail
+              };
+          },
       peg$c1 = function(activity, opens, closes) {
-            return activity + ': opens:' + opens + ', closes: ' + closes;
+            return {
+            	"activity": activity,
+              "open": opens,
+              "close": closes
+            };
           },
       peg$c2 = function(activity, opens, due, cutoff) {
-            return activity + ': allow submissions after:' + opens + ', due date: ' + due + ', cutoff date: ' + cutoff;
+            return {
+            	"activity": activity,
+              "open": opens,
+              "due": due,
+              "cutoff": cutoff
+            };
           },
       peg$c3 = function(head, tail) {
           return head + tail;
@@ -163,10 +175,27 @@ function peg$parse(input, options) {
            return head + tail;
          },
       peg$c11 = function(head, tail) {
-          var result = head, i;
+          var result = {"activity":head}, i;
           if (tail !== null) {
             for (i=0; i<tail.length; i++) {
-              result += tail[i];
+            	if(tail[i] !== null){
+              	switch(i){
+                  	case 0:
+                      	result.modifier = tail[i];
+                          break;
+                      case 1:
+                      	var modif = {};
+                          
+                          if(tail[i][0] !== null) { modif.modifier = tail[i][0][0]; }
+                          if(tail[i][0][1] !== null) {
+                          	modif.number = tail[i][0][1][0];
+                              modif.type = tail[i][0][1][1];
+                          }
+                          if(tail[i][1] !== null) { modif.at = tail[i][1][1]; }
+                      	result.time = modif;
+                          break;
+                  }
+              }
             }
           }
           return result;
@@ -224,10 +253,10 @@ function peg$parse(input, options) {
       peg$c62 = "P",
       peg$c63 = peg$literalExpectation("P", false),
       peg$c64 = function() {return 'Practicum'; },
-      peg$c65 = function() {return '(start)'; },
+      peg$c65 = function() {return 'start'; },
       peg$c66 = "F",
       peg$c67 = peg$literalExpectation("F", false),
-      peg$c68 = function() {return '(end)'; },
+      peg$c68 = function() {return 'end'; },
       peg$c69 = "#",
       peg$c70 = peg$literalExpectation("#", false),
       peg$c71 = peg$anyExpectation(),
