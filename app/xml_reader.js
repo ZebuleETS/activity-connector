@@ -2,6 +2,7 @@ var MoodleActivity = require('./models/moodle_activity')
 var MoodleQuiz = require('./models/moodle_quiz')
 var MoodleAssignment = require('./models/moodle_assignment')
 var fs = require('fs')
+var path = require('path')
 var tar = require('tar')
 var xml2js = require('xml2js')
 var base_path = './tmp'
@@ -14,7 +15,7 @@ function extractTar(file_path) {
     // Check if mbz file exists, then extract to tmp directory
     if (file_path.endsWith(".mbz")) {
         try {
-            var new_directory = base_path + "/" + file_path.split("/").pop().replace(".mbz", "")
+            var new_directory = path.join(base_path, file_path.split('data').pop().replace(".mbz", ""))
             if (!fs.existsSync(new_directory)) {
                 fs.mkdirSync(new_directory)
             }
@@ -32,7 +33,8 @@ function extractTar(file_path) {
 
 
 function fetchQuizInfo(file_path, directory) {
-    var data = fs.readFileSync(file_path + "/" + directory + "/quiz.xml", "utf-8")
+    const quizPath = path.join(file_path, directory, "quiz.xml")
+    var data = fs.readFileSync(quizPath, "utf-8")
     var quiz_info
     xml2js.parseString(data, function (err, data) {
         quiz_info = {
@@ -46,7 +48,8 @@ function fetchQuizInfo(file_path, directory) {
 
 
 function fetchAssignInfo(file_path, directory) {
-    var data = fs.readFileSync(file_path + "/" + directory + "/assign.xml", "utf-8")
+    const assignPath = path.join(file_path, directory, "assign.xml")
+    var data = fs.readFileSync(assignPath, "utf-8")
     var assign_info
     xml2js.parseString(data, function (err, data) {
         assign_info = {
@@ -60,7 +63,8 @@ function fetchAssignInfo(file_path, directory) {
 
 function fetchActivities(file_path) {
     var activities = []
-    var xml_data = fs.readFileSync(file_path + "/moodle_backup.xml", "utf-8")
+
+    var xml_data = fs.readFileSync(path.join(file_path, "moodle_backup.xml"), "utf-8")
     xml2js.parseString(xml_data, function (err, data) {
         for (var obj of data['moodle_backup']['information'][0]['contents'][0]['activities'][0]['activity']) {
             switch (obj.modulename[0]) {
