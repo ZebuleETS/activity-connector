@@ -42,11 +42,19 @@ class iCalParser {
         }
       }
     }
-      return {
-        seminars: seminars,
-        practicums: practicums,
-        laboratories: laboratories
-      }
+
+    this.seminars = seminars;
+    this.practicums = practicums;
+    this.laboratories = laboratories;
+
+    if (!seminars.length && !practicums.length && !laboratories.length)
+      return null;
+
+    return {
+      seminars: this.seminars,
+      practicums: this.practicums,
+      laboratories: this.laboratories
+    }
   };
 }
 
