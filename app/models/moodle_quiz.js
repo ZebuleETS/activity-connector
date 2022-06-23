@@ -14,11 +14,15 @@ class MoodleQuiz extends MoodleActivity {
         this.timeopen = timeopen
         this.timeclose = timeclose
     }  
-    
+    getTimeOpen(){
+        return this.timeopen;
+    }
     setTimeOpen(timeOpen){
         this.timeopen = timeOpen;
     } 
-
+    getTimeClose(){
+        return this.timeclose;
+    }
     setTimeClose(timeClose){
         this.timeclose = timeClose;
     } 

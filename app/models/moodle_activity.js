@@ -12,4 +12,10 @@ module.exports = class MoodleActivity {
         this.modulename = modulename
         this.directory = directory 
     }
+    getModuleId(){
+        return this.moduleid;
+    }
+    getModuleName(){
+        return this.modulename;
+    }
 }

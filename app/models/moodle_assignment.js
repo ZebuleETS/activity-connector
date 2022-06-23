@@ -14,14 +14,19 @@ class MoodleAssignment extends MoodleActivity{
         this.duedate = duedate
         this.allowsubmissionsfromdate = allowsubmissionsfromdate
     }
-
+    getDueDate(){
+        return this.duedate; 
+    }
     setDueDate(dueDate){
         this.duedate = dueDate;
     }
-
     setAllowSubmissionsFromDate(allowSubmissionsFromDate){
         this.allowsubmissionsfromdate = allowSubmissionsFromDate;
     }
+    getAllowSubmissionsFromDate(){
+        return this.allowsubmissionsfromdate ;
+    }
+    
 }
 
 module.exports = MoodleAssignment
