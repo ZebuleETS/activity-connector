@@ -1,6 +1,7 @@
 var MoodleActivity = require('./models/moodle_activity')
 var MoodleQuiz = require('./models/moodle_quiz')
 var MoodleAssignment = require('./models/moodle_assignment')
+var archiver = require('archiver');
 var fs = require('fs')
 var tar = require('tar')
 var xml2js = require('xml2js')
@@ -37,13 +38,12 @@ function fetchQuizInfo(file_path, directory) {
     xml2js.parseString(data, function (err, data) {
         quiz_info = {
             timeopen: data['activity']['quiz'][0]['timeopen'][0],
-            timeclose: data['activity']['quiz'][0]['timeopen'][0],
+            timeclose: data['activity']['quiz'][0]['timeclose'][0],
         }
     })
 
     return quiz_info
 }
-
 
 function fetchAssignInfo(file_path, directory) {
     var data = fs.readFileSync(file_path + "/" + directory + "/assign.xml", "utf-8")
@@ -88,13 +88,70 @@ function fetchActivities(file_path) {
     //console.log(activities)
     return activities
 }
-// var path = "data/backup-moodle2-course-1677-s20143-log792-09-20151102-1508-nu.mbz"
-// var new_path = "tmp/backup-moodle2-course-1677-s20143-log792-09-20151102-1508-nu/"
 
-// extract_tar(path)
-// fetch_activities(new_path)
+function updateActivities(file_path, activities){
+    for(let i=0; i<activities.length; i++){
+        let path = (file_path+"activities"+ "/" +activities[i].getModuleName()+"_"+activities[i].getModuleId()+"/" +activities[i].getModuleName()+".xml")
+        var xml_data = fs.readFileSync(path)   
+            xml2js.parseString(xml_data, function (err, data) {
+            switch(activities[i].getModuleName()){
+                case 'quiz':                    
+                    data['activity']['quiz'][0].timeopen = [activities[i].getTimeOpen()];
+                    data['activity']['quiz'][0].timeclose = [activities[i].getTimeClose()];
+                    
+                    const quizBuilder = new xml2js.Builder();
+                    const xmlQuiz = quizBuilder.buildObject(data);
+
+                    fs.writeFileSync(path, xmlQuiz, (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                    });                    
+                    break;
+                case 'assign':
+                    data['activity']['assign'][0].duedate =[activities[i].getDueDate()]
+                    data['activity']['assign'][0].allowsubmissionsfromdate =[activities[i].getAllowSubmissionsFromDate()]
+
+                    const assignBuilder = new xml2js.Builder();
+                        const xmlAssign = assignBuilder.buildObject(data);
+
+                        fs.writeFileSync(path, xmlAssign, (err) => {
+                            if (err) {
+                                throw err;
+                            }
+                        });
+                    break;
+            }
+        })
+    }
+}
+
+function repackageToMBZ(file_path){
+
+    var updatedate = new Date();
+    var updatedate = updatedate.getDay()+'-'+(updatedate.getMonth()+1)+'_'+updatedate.getHours()+':'+updatedate.getMinutes()
+
+    var output = fs.createWriteStream('mbzPackages/'+'moodle-backup-'+ updatedate + '.mbz');
+    var archive = archiver('zip');
+
+    output.on('close', function () {
+        console.log(archive.pointer() + ' total bytes');
+    });
+
+    archive.on('error', function(err){
+        throw err;
+    });
+
+    archive.pipe(output);
+
+    archive.directory(file_path, false);
+
+    archive.finalize();
+}
 
 module.exports = {
     extractTar: extractTar,
-    fetchActivities: fetchActivities
+    fetchActivities: fetchActivities,
+    updateActivities: updateActivities,
+    repackageToMBZ:repackageToMBZ
 }
