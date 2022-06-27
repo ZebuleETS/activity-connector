@@ -25,11 +25,13 @@ function extractTar(file_path) {
                 C: new_directory,
                 sync: true
             })
+            return true;
         } catch (error) {
             // TODO add error handling with custom exception
             console.log(error)
         }
     }
+    return false;
 }
 
 
@@ -130,16 +132,16 @@ function updateActivities(file_path, activities){
     }
 }
 
-function repackageToMBZ(file_path){
+async function repackageToMBZ(file_path){
 
     var updatedate = new Date();
-    var updatedate = updatedate.getDay()+'-'+(updatedate.getMonth()+1)+'_'+updatedate.getHours()+'_'+updatedate.getMinutes()
+    var updatestring = updatedate.getDay()+'-'+(updatedate.getMonth()+1)+'_'+updatedate.getHours()+'_'+updatedate.getMinutes();
 
-    var output = fs.createWriteStream('mbzPackages/'+'moodle-backup-'+ updatedate + '.mbz');
+    var output = fs.createWriteStream('mbzPackages/'+'moodle-backup-'+ updatestring + '.mbz');
     var archive = archiver('zip');
 
     output.on('close', function () {
-        console.log(archive.pointer() + ' total bytes');
+        //console.log(archive.pointer() + ' total bytes'); // This console.log() prevent the tests from working because tests doesn't authorize logs after tests are done.
     });
 
     archive.on('error', function(err){
@@ -150,7 +152,8 @@ function repackageToMBZ(file_path){
 
     archive.directory(file_path, false);
 
-    archive.finalize();
+    await archive.finalize();
+    return updatestring;
 }
 
 module.exports = {
