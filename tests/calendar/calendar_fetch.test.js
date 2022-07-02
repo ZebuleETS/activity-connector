@@ -1,11 +1,11 @@
 /* Calendar requirements */
 const iCalParser = require('../../utils/iCalParser');
 
-const activityTypes = ["", "C", "TP", "LABO"];
-var symbol = "log210";
-var group = "01";
-var year = "2022";
-var semesterSeason = "2";
+const activityTypes = ['', 'C', 'TP', 'LABO'];
+var symbol = 'log210';
+var group = '01';
+var year = '2022';
+var semesterSeason = '2';
 
 /*-------CALENDAR TESTS--------*/
 
