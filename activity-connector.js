@@ -13,7 +13,7 @@ const {
   updateActivities,
   repackageToMBZ,
 } = require("./app/utils/xmlReader");
-
+const MoodleAssignment = require("./app/models/moodle_assignment");
 const { InvalidSemesterSeason } = require("./app/exceptions");
 
 const getSemesterSeasonNumber = function (semesterSeason) {
@@ -139,7 +139,7 @@ program
   });
 
 // ./activity-connector.js update data/backup-moodle2-course-17014-s20222-log210-99-20220619-1506-nu.mbz data/test.dsl LOG210 01 2022 Summer
-// node activity-connector.js update .\data\backup-moodle2-course-17014-s20222-log210-99-20220619-1506-nu.mbz .\data\test.dsl LOG210 01 2022 Summer
+// node activity-connector.js update .\data\backup-moodle2-course-17014-s20222-log210-99-20220703-1253-nu.mbz .\data\test.dsl LOG210 01 2022 Summer
 program
   .command("update")
   .description(
@@ -211,6 +211,35 @@ program
               if (i == index) {
                 activity.setTimeOpen(`${obj.open.getTime() / 1000}`);
                 activity.setTimeClose(`${obj.close.getTime() / 1000}`);
+                break;
+              }
+              i++;
+            }
+          }
+        }
+        if (obj.activity.includes("Homework")) {
+          var index = Number.parseInt(obj.activity.split(" ")[2]) - 1;
+          let i = 0;
+          for (var activity of activities) {
+            if (activity instanceof MoodleAssignment) {
+              if (i == index) {
+                activity.setDueDate(`${obj.due.getTime() / 1000}`);
+                activity.setAllowSubmissionsFromDate(`${obj.open.getTime() / 1000}`);
+                activity.setCutoffDate(`${obj.cutoff.getTime() / 1000}`)
+                break;
+              }
+              i++;
+            }
+          }
+        }
+        if (obj.activity.includes("Exam")) {
+          var index = Number.parseInt(obj.activity.split(" ")[1]) - 1;
+          let i = 0;
+          for (var activity of activities) {
+            if (activity instanceof MoodleQuiz && activity.title.toLowerCase().includes("exam")) {
+              if (i == index) {
+                activity.setTimeOpen(`${obj.open.getTime() / 1000}`);
+                activity.setTimeClose(`${(obj.open.getTime() / 1000) + Number.parseInt(activity.getTimeLimit())}`)
                 break;
               }
               i++;
