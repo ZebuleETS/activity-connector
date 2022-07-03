@@ -29,7 +29,7 @@ function extractTar(file_path) {
         sync: true,
       });
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }
@@ -39,12 +39,13 @@ function fetchQuizInfo(file_path, directory) {
   var data = fs.readFileSync(quizPath, "utf-8");
   var quiz_info;
   xml2js.parseString(data, function (err, data) {
-    if(err){
-      throw err
+    if (err) {
+      throw err;
     }
     quiz_info = {
       timeopen: data["activity"]["quiz"][0]["timeopen"][0],
       timeclose: data["activity"]["quiz"][0]["timeclose"][0],
+      timelimit: data["activity"]["quiz"][0]["timelimit"][0],
     };
   });
 
@@ -56,13 +57,14 @@ function fetchAssignInfo(file_path, directory) {
   var data = fs.readFileSync(assignPath, "utf-8");
   var assign_info;
   xml2js.parseString(data, function (err, data) {
-    if(err){
-      throw err
+    if (err) {
+      throw err;
     }
     assign_info = {
       duedate: data["activity"]["assign"][0]["duedate"][0],
       allowsubmissionsfromdate:
         data["activity"]["assign"][0]["allowsubmissionsfromdate"][0],
+      cutoffdate: data["activity"]["assign"][0]["cutoffdate"][0],
     };
   });
 
@@ -95,6 +97,7 @@ function fetchActivities(file_path) {
               obj.directory[0],
               quiz_info.timeopen,
               quiz_info.timeclose,
+              quiz_info.timelimit,
             ),
           );
           break;
@@ -109,6 +112,7 @@ function fetchActivities(file_path) {
               obj.directory[0],
               assign_info.duedate,
               assign_info.allowsubmissionsfromdate,
+              assign_info.cutoffdate,
             ),
           );
           break;
@@ -131,11 +135,15 @@ function fetchActivities(file_path) {
 
 function updateActivities(file_path, activities) {
   for (let i = 0; i < activities.length; i++) {
-    let updatePath = path.join(file_path, activities[i].directory, activities[i].getModuleName() + ".xml");
+    let updatePath = path.join(
+      file_path,
+      activities[i].directory,
+      activities[i].getModuleName() + ".xml",
+    );
     var xml_data = fs.readFileSync(updatePath);
     xml2js.parseString(xml_data, function (err, data) {
-      if(err){
-        throw err
+      if (err) {
+        throw err;
       }
       switch (activities[i].getModuleName()) {
         case "quiz":
@@ -157,6 +165,9 @@ function updateActivities(file_path, activities) {
           data["activity"]["assign"][0].duedate = [activities[i].getDueDate()];
           data["activity"]["assign"][0].allowsubmissionsfromdate = [
             activities[i].getAllowSubmissionsFromDate(),
+          ];
+          data["activity"]["assign"][0].cutoffdate = [
+            activities[i].getCutoffDate(),
           ];
 
           const assignBuilder = new xml2js.Builder();
