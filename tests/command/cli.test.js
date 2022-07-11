@@ -2,8 +2,10 @@ let path = require('path');
 let exec = require('child_process').exec;
 
 function cli(args, cwd) {
-  return new Promise(resolve => { 
-    exec(`node ${path.resolve('./activity-connector.js')} ${args.join(' ')}`,
+  return new Promise(resolve => {
+    let command = `node "${path.resolve('./activity-connector.js')}" ${args.join(' ')}`;
+    // console.log(`Command: "${command}"`);
+    exec(command,
     { cwd }, 
     (error, stdout, stderr) => { resolve({
     code: error && error.code ? error.code : 0,
