@@ -2,11 +2,11 @@
 Activity connector for Moodle and SignETS
 
 # Usage
-```node activity-connector.js``` will show you the help section of every commands available in the command line tool. You can then use ```node activity-connectory.js -command_name- --help``` to see the help dialogue for every command.
+```node activity-connector.js``` will show you the help section of every command available in the command-line tool. You can then use ```node activity-connectory.js -command_name- --help``` to see the help dialogue for every command.
 
 For example, 
 ```bash
-node activity-connectory.js create -h
+node activity-connector.js create -h
 ```
 will output the following help dialogue:
 ```
