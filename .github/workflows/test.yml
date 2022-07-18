@@ -6,6 +6,9 @@ on:
       - main
       - develop
 
+env:
+  TZ: America/Montreal
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
