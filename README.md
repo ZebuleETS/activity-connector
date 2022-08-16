@@ -74,11 +74,11 @@ Examples of command executions are provided in the help.
 This application uses a Peg.js file to parse a simple (domain specific) language to specify activities, events and dates.
 This section provides the general rules of this activity planner.
 
-There are 3 main calendar activities:
+There are 3 main calendar activities (events):
 
 - Seminars (`S`), i.e., the repeating events of when students meet for class with an instructor,
 - Laboratories (`L`), i.e., the repeating events when students meet for labs with a lab assistant,
-- Practicums (`P`), i.e., the repeating events when students meet for work on exercises with a tutor (like a lab, but different).
+- Practica (`P`), i.e., the repeating events when students meet for work on exercises with a tutor (like a lab, but different).
 
 Here are the main Moodle activities:
 
