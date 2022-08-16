@@ -138,11 +138,11 @@ Example: node activity-connector.js print-ics -a LOG210 -g 01 -y 2022 -s Summer
 // node activity-connector.js parse-dsl -dp ./data/test.dsl -if ./data/Seances.ics
 program
   .command("parse-dsl")
-  .summary("Parses a dsl file and outputs new dates based on a course")
+  .summary("Parses a plan (.dsl) file and outputs new dates based on a course")
   .description(
-    `Parses a dsl file and outputs new dates based on a course's informations.
+    `Parses a plan (.dsl) file and outputs new dates based on a course's calendar.
 
-If the -if, --icsfile option is passed to the command, the ics file will be used instead of the API. 
+If the -if, --icsfile option is passed to the command, the ics file will be used instead of the ETS API. 
 Otherwise, the required options are --acronym, --group, --year and --semester (short flags are also accepted).
 The -dp flag is always required.
 
@@ -151,25 +151,25 @@ Example: node activity-connector.js parse-dsl -dp ./path/to/file.dsl -a LOG210 -
   )
   .requiredOption(
     "-dp, --dslpath <directory>",
-    "(required) the path to the DSL file",
+    "(required) the path to the plan (.dsl) file",
   )
-  .option("-if, --icsfile <directory>", "the path to the ics file")
+  .option("-if, --icsfile <directory>", "the path to the calendar (.ics) file")
   .option(
     "-a, --acronym <course>",
-    "the course's acronym (e.g. LOG210, GTI745, MEC200, ...)",
+    "the École de technologie supérieure course's acronym (e.g. LOG210, GTI745, MEC200, ...)",
   )
   .option(
     "-g, --group <number>",
-    "the group number for the course (if the group is a single digit, add a 0 in front e.g. 01, 02, ...)",
+    "the group number for the École de technologie supérieure course (if the group is a single digit, add a 0 in front e.g. 01, 02, ...)",
   )
-  .option("-y --year <number>", "the year of the course")
+  .option("-y --year <number>", "the year of the École de technologie supérieure course")
   .option(
-    "-s --semester <season>",
-    "the semester's season. The options are Winter, Summer or Fall",
+    "-s --semester <name>",
+    "the École de technologie supérieure semester's name. The options are Winter, Summer or Fall",
   )
   .option(
     "-t, --typeact <string>",
-    "(optional) the activity type (such as C, Labo or TP)",
+    "(optional) the École de technologie supérieure activity type (such as C, Labo or TP)",
     "",
   )
   .action(async function (options) {
@@ -221,37 +221,36 @@ program
   .command("create")
   .summary("create a new updated mbz file")
   .description(
-    `Create a new updated mbz file using the mbz backup from
-Moodle, the dsl file and informations about the course.
+    `Create a new, updated backup (.mbz) file using an existing backup (.mbz) file from Moodle, a plan (.dsl) file and the calendar of course events (.ics).
 
 Example: create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -a LOG210 -g 01 -y 2022 -s Summer
          create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -if ./path/to/file.ics`,
   )
   .requiredOption(
     "-mp --mbzpath <directory>",
-    "(required) the path of the mbz file",
+    "(required) the path of the Moodle backup (.mbz) file",
   )
   .requiredOption(
     "-dp, --dslpath <directory>",
-    "(required) the path to the DSL file",
+    "(required) the path to the plan (.dsl) file",
   )
-  .option("-if, --icsfile <directory>", "the path to the ics file")
+  .option("-if, --icsfile <directory>", "the path to the calendar (.ics) file")
   .option(
     "-a, --acronym <course>",
-    "the course's acronym (e.g. LOG210, GTI745, MEC200, ...)",
+    "the École de technologie supérieure course's acronym (e.g., LOG210, GTI745, MEC200, ...)",
   )
   .option(
     "-g, --group <number>",
-    "the group number for the course (if the group is a single digit, add a 0 in front e.g. 01, 02, ...)",
+    "the group number for the École de technologie supérieure course (if the group is a single digit, add a 0 in front e.g., 01, 02, ...)",
   )
-  .option("-y --year <number>", "the year of the course")
+  .option("-y --year <number>", "the year of the École de technologie supérieure course, e.g., 2022")
   .option(
-    "-s --semester <season>",
-    "the semester's season. The options are Winter, Summer or Fall",
+    "-s --semester <name>",
+    "the École de technologie supérieure semester's name. The options are Winter, Summer or Fall.",
   )
   .action(async function (options) {
     try {
-      console.log("Fetching DSL...");
+      console.log("Fetching activity plan (.dsl) file...");
       var activityPlan = fs.readFileSync(options.dslpath, { encoding: "utf8" });
 
       console.log("Fetching .ics calendar...");
@@ -283,7 +282,7 @@ Example: create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -a LOG210 -g 01 -y
         calendarActivities = await ical.parse();
       }
 
-      console.log("Parse DSL and getting new dates...");
+      console.log("Parse activity plan (.dsl) file and getting new dates...");
       try {
         var newTimes = dslDateParser.getListModifiedTimes(
           calendarActivities,
@@ -311,7 +310,7 @@ Example: create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -a LOG210 -g 01 -y
 
       // TODO Refactor into another file
       // TODO only modifies quiz so far, have to cover the other classes
-      console.log("Modifying Moodle Activities...");
+      console.log("Modifying Moodle activity dates...");
       for (const obj of newTimes) {
         if (obj.activity.includes("Quiz")) {
           var index = Number.parseInt(obj.activity.split(" ")[2]) - 1;
@@ -372,7 +371,7 @@ Example: create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -a LOG210 -g 01 -y
       console.log("Repackaging...");
       let mbzPath = await repackageToMBZ(newPath);
 
-      console.log("Done! The new .mbz file is in the following path:", mbzPath);
+      console.log("Done! The new .mbz file with updated activity dates is in the following path:", mbzPath);
     } catch (err) {
       console.error(err.message);
     }
