@@ -45,7 +45,8 @@ will output the following help information:
 ```text
 Usage: activity-connector create [options]
 
-Create a new, updated backup (.mbz) file using an existing backup (.mbz) file from Moodle, a plan (.dsl) file and the calendar of course events (.ics).
+Create a new, updated backup (.mbz) file using an existing backup (.mbz) file from Moodle,  
+a plan (.dsl) file and the calendar of course events (.ics).
 
 Example: create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -a LOG210 -g 01 -y 2022 -s Summer
          create -mp ./path/to/file.mbz -dp ./path/to/file.dsl -if ./path/to/file.ics
