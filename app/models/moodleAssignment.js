@@ -36,6 +36,17 @@ class MoodleAssignment extends MoodleActivity {
   setCutoffDate(cutOffDate) {
     this.cutOffDate = cutOffDate;
   }
+
+  toString() {
+    let openDate = new Date(0);
+    let dueDate = new Date(0);
+    let cutoffDate = new Date(0);
+    openDate.setUTCSeconds(this.allowSubmissionsFromDate);
+    dueDate.setUTCSeconds(this.dueDate);
+    cutoffDate.setUTCSeconds(this.cutOffDate);
+    return `  Title: ${this.title}\n  Opens at ${openDate.toLocaleString()}\n  Is due at ${dueDate.toLocaleString()}\n  Closes at ${cutoffDate.toLocaleString()}`
+  }
+
 }
 
 module.exports = MoodleAssignment;

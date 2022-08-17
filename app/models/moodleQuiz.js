@@ -35,6 +35,16 @@ class MoodleQuiz extends MoodleActivity {
   setTimeLimit(timeLimit) {
     this.timeLimit = timeLimit;
   }
+
+  toString() {
+    let openDate = new Date(0);
+    let closeDate = new Date(0);
+    openDate.setUTCSeconds(this.timeOpen);
+    closeDate.setUTCSeconds(this.timeClose);
+    return `  Title: ${this.title}\n  Opens at ${openDate.toLocaleString()}\n  Closes at ${closeDate.toLocaleString()}`
+  }
 }
 
 module.exports = MoodleQuiz;
+
+
