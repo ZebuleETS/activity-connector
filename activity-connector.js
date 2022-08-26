@@ -62,7 +62,23 @@ Example: node activity-connector.js print-dir --path ./path/to/directory`,
     "(required) the directory to the extracted Moodle files.",
   )
   .action(function (options) {
-    console.log(fetchActivities(options.path));
+    activities = fetchActivities(options.path);
+    quizzes = [];
+    homeworks = [];
+    others = [];
+    activities.forEach(activity => {
+      if (activity instanceof MoodleQuiz) quizzes.push(activity);
+      else if (activity instanceof MoodleAssignment) homeworks.push(activity);
+      else others.push(activity);
+    });
+    quizzes.forEach((quiz, i) => {
+      console.log(`Q${i+1}: `)
+      console.log(`${quiz.toString()}`)
+    });
+    homeworks.forEach((hw, i) => {
+      console.log(`H${i+1}: `)
+      console.log(`${hw.toString()}`)
+    });
   });
 
 // node activity-connector.js print-ics --acronym LOG210 --group 01 --year 2022 --semester Summer
