@@ -167,6 +167,28 @@ Download the file and save it on your computer.
 ### Step 2. Create an activity planner file (.dsl)
 
 To use the application, you must create an activity planner file that will be used to configure the dates of the existing activities in your Moodle course.
+You can find the existing activities as follows:
+
+1. Extract the files from the backup (.mbz). Assuming your backup file is named `backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu.mbz` and it's in the same directory as the current directory of your bash:
+
+```bash
+activity-connector extract-mbz -p backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu.mbz
+```
+
+This will extract the files into a `tmp/backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu` subdirectory.
+
+2. Print the activities in the Moodle backup. This is important so you can understand their order (numbering) for the activity planner file:
+
+```bash
+a-c print-dir tmp/backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu
+```
+
+This will display a list of activities with their numbers:
+
+```text
+(to be added)
+```
+
 You can simply create a file in Notepad or a text editor of your choice.
 For more information concerning how to write the file, please refer to this section: [Activity Planner](#activity-planner).
 Here is an example of an activity planner file:
