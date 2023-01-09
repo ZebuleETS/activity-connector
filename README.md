@@ -172,7 +172,7 @@ You can find the existing activities as follows:
 1. Extract the files from the backup (.mbz). Assuming your backup file is named `backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu.mbz` and it's in the same directory as the current directory of your bash:
 
 ```bash
-activity-connector extract-mbz -p backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu.mbz
+a-c extract-mbz -p backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu.mbz
 ```
 
 This will extract the files into a `tmp/backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu` subdirectory.
@@ -180,26 +180,58 @@ This will extract the files into a `tmp/backup-moodle2-course-18188-s20231-mgl84
 2. Print the activities in the Moodle backup. This is important so you can understand their order (numbering) for the activity planner file:
 
 ```bash
-a-c print-dir tmp/backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu
+a-c print-dir -p tmp/backup-moodle2-course-18188-s20231-mgl843-01-20230108-2156-nu
 ```
 
 This will display a list of activities with their numbers:
 
 ```text
-(to be added)
+Q1: 
+  Title: Final exam
+  Opens at 2021-04-08, 6:00:00 p.m.
+  Closes at 2021-04-08, 8:00:00 p.m.
+Q2:
+  Title: Quiz week X (template)
+  Opens at 2021-01-14, 10:00:00 p.m.
+  Closes at 2021-01-21, 5:30:00 p.m.
+Q3:
+  Title: Quiz week 2
+  Opens at 2022-01-06, 9:45:00 p.m.
+  Closes at 2022-01-13, 5:45:00 p.m.
+Q4:
+  Title: Quiz week 3
+  Opens at 2022-01-13, 9:45:00 p.m.
+  Closes at 2022-01-20, 5:30:00 p.m.
+H1:
+  Title: Homework Socrates
+  Opens at 2019-09-16, 12:00:00 p.m.
+  Is due at 2019-10-01, 11:55:00 p.m.
+  Closes at 2019-10-01, 11:55:00 p.m.
+H2:
+  Title: Team report
+  Opens at 2022-01-08, 12:00:00 a.m.
+  Is due at 2022-01-20, 12:00:00 a.m.
+  Closes at 1969-12-31, 7:00:00 p.m.
 ```
 
-You can simply create a file in Notepad or a text editor of your choice.
-For more information concerning how to write the file, please refer to this section: [Activity Planner](#activity-planner).
-Here is an example of an activity planner file:
+Please note that some quizzes are actually exams (Moodle doesn't know the difference), so pay attention to the numbering in this output above.
+Another special case can happen when you have a "hidden" quiz, such as **Q2** above (which is used as a template to make new quizzes).
+It takes up a spot on the list of quizzes in the course.
+In the example above, the first quiz for the students will be **Q3**, which is supposed to be in Week 2.
+You specify this in the activity planner file by determining which activity (seminar, laboratory, practicum) happens in Week 2.
+For example, if it's a reading quiz (to be done prior to a seminar) and seminars happen once a week, you can make the quiz start/end relative to the dates of the appropriate seminar(s), e.g., the quiz opens at the end of the first seminar (`S1F`) and closes 30 minutes prior to the second seminar (`S2S-30m`).
+
+You can create a file in Notepad or a text editor of your choice.
+For more information of the format, refer to [Activity Planner](#activity-planner).
+Here is an example of an activity planner file (remember that the 3 in Q3 is the *third* quiz activity in the Moodle backup file, not the third quiz of the semester):
 
 ```text
-Q1 S1F S2S-30m
-Q2 S2F S3S-1d@23:55
+Q3 S1F S2S-30m
+Q4 S2F S3S-1d@23:55
 H1 L2F L3S-1d@23:55 L3S-1d@23:55
 ```
 
-This file states that the first two quizzes in the backup file will open at the end (F) of Seminars (S) 1 and 2 respectively.
+This file states that the third and fourth quizzes in the backup file will open at the end (F) of Seminars (S) 1 and 2 respectively.
 The first quiz will close 30 minutes before Seminar 2 starts (S), and the second quiz will close at 11:55pm the day (night) before Seminar 3 starts (S).
 The first homework in the backup file will open at the end (F) of Lab 2, will be due (without being late) at 11:55pm the night before Lab 3. Since there is no chance to submit it late, the third (cutoff) date is the same as the second (due) date.
 
