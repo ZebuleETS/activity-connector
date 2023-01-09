@@ -37,7 +37,7 @@ For local development, you can simply run the activity-connector.js file directl
 For example,
 
 ```bash
-node activity-connector.js create -h
+activity-connector create -h
 ```
 
 will output the following help information:
