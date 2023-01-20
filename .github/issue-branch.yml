@@ -1,6 +1,7 @@
 branchName: '${issue.number}-${issue.title}'
 silent: false
 autoCloseIssue: true
+mode: chatops
 branches:
   - label: 
       - Dupicate
