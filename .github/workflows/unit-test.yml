@@ -4,8 +4,6 @@
 name: Test unitaire
 
 on:
-  pull_request:
-    branches: [ main ]
 
 jobs:
   unit-test:
@@ -25,18 +23,6 @@ jobs:
           pip install pipenv
           
       working-directory: src
-    - name: Make envfile
-      uses: SpicyPizza/create-envfile@v1.3
-      with:
-        envkey_HVAC_HOST: ${{ secrets.HVAC_HOST }}
-        envkey_HVAC_MAX_COLD: ${{ secrets.HVAC_MAX_COLD }}
-        envkey_HVAC_MAX_HEAT: ${{ secrets.HVAC_MAX_HEAT }}
-        envkey_HVAC_TICK_NB: ${{ secrets.HVAC_TICK_NB }}
-        envkey_HVAC_TOKEN: ${{ secrets.HVAC_TOKEN }}
-        envkey_HVAC_DB: ${{ secrets.HVAC_DB }}
-        envkey_HVAC_DB_HOST : ${{ secrets.HVAC_DB_HOST}}
-        envkey_HVAC_PWD : ${{ secrets.HVAC_PWD }}
-        envkey_HVAC_USER : ${{ secrets.HVAC_USER }}
     - name: Run Tests
       run: |
         python -m  pipenv install
