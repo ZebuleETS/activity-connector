@@ -1,0 +1,8 @@
+branchName: '${issue.number}-${issue.title}'
+silent: false
+autoCloseIssue: true
+branches:
+  - label: 
+      - Dupicate
+      - Documentation
+    skip: true

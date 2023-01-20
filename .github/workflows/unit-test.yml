@@ -1,0 +1,43 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Test unitaire
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  unit-test:
+
+    runs-on: ubuntu-latest
+    environment: HvacData
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pipenv
+          
+      working-directory: src
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_HVAC_HOST: ${{ secrets.HVAC_HOST }}
+        envkey_HVAC_MAX_COLD: ${{ secrets.HVAC_MAX_COLD }}
+        envkey_HVAC_MAX_HEAT: ${{ secrets.HVAC_MAX_HEAT }}
+        envkey_HVAC_TICK_NB: ${{ secrets.HVAC_TICK_NB }}
+        envkey_HVAC_TOKEN: ${{ secrets.HVAC_TOKEN }}
+        envkey_HVAC_DB: ${{ secrets.HVAC_DB }}
+        envkey_HVAC_DB_HOST : ${{ secrets.HVAC_DB_HOST}}
+        envkey_HVAC_PWD : ${{ secrets.HVAC_PWD }}
+        envkey_HVAC_USER : ${{ secrets.HVAC_USER }}
+    - name: Run Tests
+      run: |
+        python -m  pipenv install
+        python -m  pipenv run python -m unittest discover -v
