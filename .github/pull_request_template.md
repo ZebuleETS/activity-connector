@@ -1,4 +1,4 @@
-## Thank you for your contribution to the Metrics-EQ8 repo.
+## Thank you for your contribution to the activity-connector repo.
 Before submitting this Pull Request, please make sure to review these sections:
 
 ### Summary
