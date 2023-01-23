@@ -18,6 +18,8 @@ class iCalParser {
   }
 
   async parse() {
+    let data = null;
+    try{
     const params = new URLSearchParams(
       `typeact=${this.typeact}&` +
         `Sigle=${this.symbol}&` +
@@ -27,16 +29,24 @@ class iCalParser {
     const data = await nodeICalParser.async.fromURL(
       BASE_URL + params.toString(),
     );
+    }catch (error){
+      console.log("Connection vers https://portail.etsmtl.ca est non disponible ")
+    }
 
     return this.createData(data);
   }
 
   async parseFile(filePath) {
+
     const data = await nodeICalParser.async.parseFile(filePath);
     return this.createData(data);
   }
 
   createData(data) {
+    if (!data) {
+      console.log("No data car offline");
+      return null;
+  }
     var seminars = [];
     var practicums = [];
     var laboratories = [];
