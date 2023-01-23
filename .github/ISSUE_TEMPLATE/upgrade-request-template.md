@@ -1,17 +1,17 @@
 ---
 name: Upgrade request Template
-about: Upgrade Content
+about: Mettre à niveau le contenu
 title: "[Upgrade]-"
 labels: Enhancement
 assignees: ''
 
 ---
 
-**What is the problem with the current feature? Please describe.**
-A clear and concise description of what the problem is.
+**Quel est le problème avec la fonctionnalité actuelle ? Décrivez**
+Une description claire et concise de la nature du problème.
 
-**Describe the modification you'd like**
-A clear and concise description of what you want to happen.
+**Décrivez la modification que vous souhaitez**
+Une description claire et concise de ce que vous voulez qu'il se passe.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+**Contexte supplémentaire**
+Ajoutez ici tout autre contexte ou capture d'écran concernant la demande de fonctionnalité.

@@ -1,31 +1,31 @@
 ---
 name: Visual Bug Template
-about: Visual Bug Report
+about: Rapport de bogue visuel
 title: "[VBUG]-"
 labels: Visual Bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Décrivez le bogue**
+Une description claire et concise du bogue.
 
-**Expected Visual Appearance**
-A clear and concise description of what you expected to see.
+**Apparence visuelle attendue**
+Une description claire et concise de ce que vous vous attendiez à voir.
 
-**Screenshots**
-Add screenshots to help explain your problem.
+**Captures d'écran**
+Ajoutez des captures d'écran pour aider à expliquer votre problème.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Ordinateur (veuillez compléter les informations suivantes) :**
+ - OS : [par ex. iOS]
+ - Navigateur [par ex. chrome, safari]
+ - Version [par ex. 22]
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Smartphone (veuillez compléter les informations suivantes) :**
+ - Appareil : [par ex. iphone 6]
+ - OS : [par ex. iOS8.1]
+ - Navigateur [par ex. navigateur de stock, safari]
+ - Version [par ex. 22]
 
-**Additional context**
-Add any other context about the problem here.
+**Contexte supplémentaire**
+Ajoutez ici tout autre contexte concernant le problème.
